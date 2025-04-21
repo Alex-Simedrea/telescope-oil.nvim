@@ -7,7 +7,6 @@ local make_entry = require("telescope.make_entry")
 local pickers = require("telescope.pickers")
 local themes = require("telescope.themes")
 local time = require("telescope-oil.time")
-local entry_markers = require("telescope-oil.entry-markers")
 
 local flatten = vim.tbl_flatten
 
@@ -25,7 +24,6 @@ M.get_dirs = function(opts, fn)
 			end
 			return opts.find_command
 		elseif 1 == vim.fn.executable("fd") then
-			-- return { "fd", "--type", "d", "--color", "never", '--exclude', '.git' }
 			return { "fd", "--type", "d", "--color", "never" }
 		elseif 1 == vim.fn.executable("fdfind") then
 			return { "fdfind", "--type", "d", "--color", "never" }
@@ -92,8 +90,7 @@ M.get_dirs = function(opts, fn)
 				pickers
 					.new(opts, {
 						prompt_title = "Select a Directory",
-						finder = finders.new_table({ results = data, entry_maker = entry_markers.gen_from_directory(opts) }),
-						-- finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
+						finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
 						previewer = getPreviewer(),
 						sorter = conf.file_sorter(opts),
 						attach_mappings = function(prompt_bufnr)
