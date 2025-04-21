@@ -12,6 +12,62 @@ local flatten = vim.tbl_flatten
 
 local M = {}
 
+-- Create a custom entry maker function to override icons
+local function custom_entry_maker(opts)
+  opts = opts or {}
+  -- Start with the default file entry maker from Telescope
+  local file_maker = make_entry.gen_from_file(opts)
+
+  -- Return a wrapped version that customizes the display
+  return function(entry)
+    local file_entry = file_maker(entry)
+
+    -- Store the original display function
+    local original_display = file_entry.display
+
+    -- Override the display function
+    file_entry.display = function(entry_display)
+      -- Get the original display output (usually includes filename, path, etc.)
+      local original_results = original_display(entry_display)
+
+      -- If the original results are a table with multiple components
+      if type(original_results) == "table" then
+        -- Replace just the icon component
+        -- Check if the entry is a directory
+        if vim.fn.isdirectory(entry_display.value) == 1 then
+          -- Custom directory icon (replace with your preferred icon)
+          original_results[1][1] = "📁 " -- Or any other icon you prefer
+        else
+          -- Custom file icon based on file extension
+          local ext = vim.fn.fnamemodify(entry_display.value, ":e")
+          local icon = "📄 " -- Default file icon
+
+          -- Add different icons based on file extension
+          if ext == "lua" then
+            icon = "🌙 "
+          elseif ext == "js" then
+            icon = "🟨 "
+          elseif ext == "ts" then
+            icon = "🔷 "
+          elseif ext == "json" then
+            icon = "📋 "
+          -- Add more file types as needed
+          end
+
+          original_results[1][1] = icon
+        end
+
+        return original_results
+      end
+
+      -- If the original result is just a string, prepend our icon
+      return "📄 " .. original_results
+    end
+
+    return file_entry
+  end
+end
+
 M.get_dirs = function(opts, fn)
 	if opts.debug then
 		time.time_start("get_dirs")
@@ -90,7 +146,8 @@ M.get_dirs = function(opts, fn)
 				pickers
 					.new(opts, {
 						prompt_title = "Select a Directory",
-						finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
+						-- finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
+						finder = finders.new_table({ results = data, entry_maker = custom_entry_maker(opts) }),
 						previewer = getPreviewer(),
 						sorter = conf.file_sorter(opts),
 						attach_mappings = function(prompt_bufnr)
