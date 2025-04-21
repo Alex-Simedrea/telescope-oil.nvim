@@ -2,7 +2,7 @@ local get_dirs = require("telescope-oil.utils").get_dirs
 local M = {}
 
 local function open_oil(dir)
-	vim.cmd("Oil --float" .. dir)
+	vim.cmd("Oil --float " .. dir)
 end
 
 function M.find_dirs(opts)
