@@ -28,7 +28,7 @@ local function custom_entry_maker(opts)
     default_entry.display = function(display_entry)
       local result = original_display(display_entry)
 	local mini_icon = MiniIcons.get('directory', result:gsub("^%S+%s+", ""))
-      return mini_icon .. result:gsub("^%S+%s+", "")  -- Remove the first word and replace with custom icon
+      return mini_icon .. " " .. result:gsub("^%S+%s+", "")  -- Remove the first word and replace with custom icon
     end
 
     return default_entry
