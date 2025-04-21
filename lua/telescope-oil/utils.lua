@@ -7,6 +7,7 @@ local make_entry = require("telescope.make_entry")
 local pickers = require("telescope.pickers")
 local themes = require("telescope.themes")
 local time = require("telescope-oil.time")
+local MiniIcons = require('mini.icons')
 
 local flatten = vim.tbl_flatten
 
@@ -17,6 +18,7 @@ local function custom_entry_maker(opts)
   local default_maker = make_entry.gen_from_file(opts)
 
   -- Your custom icon - use any character you want
+	-- local mini_icon = MiniIcons.get('directory', "")
   local custom_icon = "😀 " -- Replace with whatever icon you prefer
 
   return function(entry)
@@ -25,7 +27,8 @@ local function custom_entry_maker(opts)
 
     default_entry.display = function(display_entry)
       local result = original_display(display_entry)
-      return custom_icon .. result:gsub("^%S+%s+", "")  -- Remove the first word and replace with custom icon
+	local mini_icon = MiniIcons.get('directory', result:gsub("^%S+%s+", ""))
+      return mini_icon .. result:gsub("^%S+%s+", "")  -- Remove the first word and replace with custom icon
     end
 
     return default_entry
