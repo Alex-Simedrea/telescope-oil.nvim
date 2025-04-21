@@ -61,7 +61,7 @@ local function custom_entry_maker(opts)
       end
 
       -- If the original result is just a string, prepend our icon
-      return "📄 " .. original_results
+      return "❌ " .. original_results
     end
 
     return file_entry
