@@ -93,6 +93,7 @@ M.get_dirs = function(opts, fn)
 					.new(opts, {
 						prompt_title = "Select a Directory",
 						finder = finders.new_table({ results = data, entry_maker = entry_markers.gen_from_directory(opts) }),
+						-- finder = finders.new_table({ results = data, entry_maker = make_entry.gen_from_file(opts) }),
 						previewer = getPreviewer(),
 						sorter = conf.file_sorter(opts),
 						attach_mappings = function(prompt_bufnr)
