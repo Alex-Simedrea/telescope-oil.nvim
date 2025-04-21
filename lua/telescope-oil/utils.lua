@@ -25,7 +25,8 @@ M.get_dirs = function(opts, fn)
 			end
 			return opts.find_command
 		elseif 1 == vim.fn.executable("fd") then
-			return { "fd", "--type", "d", "--color", "never", '--exclude', '.git' }
+			-- return { "fd", "--type", "d", "--color", "never", '--exclude', '.git' }
+			return { "fd", "--type", "d", "--color", "never" }
 		elseif 1 == vim.fn.executable("fdfind") then
 			return { "fdfind", "--type", "d", "--color", "never" }
 		elseif 1 == vim.fn.executable("find") and vim.fn.has("win32") == 0 then
